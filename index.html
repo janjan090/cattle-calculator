@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cattle Fattening Profit Calculator (Web)</title>
+<style>
+  :root { --fg:#111; --muted:#666; --border:#ddd; --pad:10px; --gap:12px; }
+  body { font-family: system-ui, Segoe UI, Roboto, Arial, sans-serif; color:var(--fg); margin:20px; }
+  h1 { font-size: 1.6rem; margin: 0 0 12px; }
+  .card { border:1px solid var(--border); border-radius:8px; padding:16px; margin:12px 0; }
+  .grid { display:grid; grid-template-columns: 1fr 1fr; gap: var(--gap) 24px; }
+  .row { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items:center; }
+  label { font-size:.92rem; font-weight:600; }
+  .hint { color:var(--muted); font-size: .85rem; margin-top:-6px; }
+  input[type="number"] { width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; }
+  .out { background:#f7f7f7; padding:8px; border:1px solid var(--border); border-radius:6px; text-align:right; font-variant-numeric: tabular-nums; }
+  .section-title { font-weight:700; margin-bottom:8px; }
+  .btns { display:flex; gap:10px; justify-content:flex-end; margin-top:12px; }
+  button { padding:10px 14px; border:1px solid var(--border); background:#fafafa; border-radius:8px; cursor:pointer; }
+  .two-cols { display:grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .muted { color: var(--muted); }
+</style>
+</head>
+<body>
+  <h1>CATTLE FATTENING PROFIT CALCULATOR</h1>
+
+  <div class="card">
+    <div class="section-title">INPUTS</div>
+
+    <div style="margin-bottom:8px">
+      <label><input type="radio" name="diet" value="8020" checked> 80% SILAGE + 20% FEED CONCENTRATES</label><br>
+      <label><input type="radio" name="diet" value="100"> 100% SILAGE</label>
+    </div>
+
+    <div class="grid">
+      <div class="row">
+        <label>ACQUISITION COST (₱)*</label>
+        <input id="acq" type="number" step="0.01" placeholder="45000">
+      </div>
+      <div class="row">
+        <label>ENTRY WEIGHT (KG)*</label>
+        <input id="entry" type="number" step="0.01" placeholder="300">
+      </div>
+
+      <div class="row">
+        <label>SILAGE DRY MATTER %*</label>
+        <input id="dm" type="number" step="0.01" placeholder="35">
+      </div>
+      <div class="row">
+        <label>COST OF SILAGE PER KILO (₱)*</label>
+        <input id="silPrice" type="number" step="0.01" placeholder="4">
+      </div>
+
+      <div class="row only-8020">
+        <label>FEED CONCENTRATE COST PER KILO (₱)*</label>
+        <input id="concPrice" type="number" step="0.01" placeholder="22" value="35">
+      </div>
+      <div class="row">
+        <label>SELLING PRICE PER KILO (₱)*</label>
+        <input id="sell" type="number" step="0.01" placeholder="180">
+      </div>
+
+      <div class="row">
+        <label>FINAL WEIGHT (KG)*</label>
+        <input id="final" type="number" step="0.01" placeholder="420">
+      </div>
+      <div class="row">
+        <label>CARETAKER'S SALARY FOR 100 DAYS (₱)*</label>
+        <input id="caretaker" type="number" step="0.01" placeholder="3000">
+      </div>
+    </div>
+    <div> <p></p>  </div>
+    <div class="hint">(Minimum is 30% DM and maximum is 40% DM.) <span class="only-8020 muted">If 80/20 is selected, enter the feed concentrate price above.</span></div>
+  </div>
+
+  <div class="card" id="outputs">
+    <div class="section-title">OUTPUTS (100-DAY FATTENING PERIOD)</div>
+
+    <!-- 80/20 layout (3 rows) -->
+    <div class="grid" id="grid-8020">
+      <div class="row"><label>REQ'D SILAGE (KG)</label><div id="reqSilage8020" class="out">0</div></div>
+      <div class="row"><label>REQ'D FEED CONCENTRATES (KG)</label><div id="reqConc8020" class="out">0</div></div>
+      <div class="row"><label>COST OF SILAGE</label><div id="costSilage8020" class="out">₱0.00</div></div>
+      <div class="row"><label>COST OF FEED CONCENTRATES</label><div id="costConc8020" class="out">₱0.00</div></div>
+      <div class="row"><label>TOTAL FEED COST</label><div id="totalFeed8020" class="out">₱0.00</div></div>
+      <div class="row"><label>AVERAGE DAILY GAIN (KG)</label><div id="adg8020" class="out">0.00</div></div>
+    </div>
+
+    <!-- 100% layout (2 rows) -->
+    <div class="grid" id="grid-100" style="display:none">
+      <div class="row"><label>REQ'D SILAGE (KG)</label><div id="reqSilage100" class="out">0</div></div>
+      <div class="row"><label>TOTAL FEED COST</label><div id="totalFeed100" class="out">₱0.00</div></div>
+      <div class="row"><label>COST OF SILAGE</label><div id="costSilage100" class="out">₱0.00</div></div>
+      <div class="row"><label>AVERAGE DAILY GAIN (KG)</label><div id="adg100" class="out">0.00</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">EXPENSES AND PROFIT</div>
+    <div class="grid">
+      <div class="row"><label>TOTAL EXPENSES FOR 100 DAYS (₱)</label><div id="exp100" class="out">₱0.00</div></div>
+      <div class="row"><label>GROSS SALE</label><div id="gross" class="out">₱0.00</div></div>
+      <div class="row"><label>NET INCOME</label><div id="net" class="out">₱0.00</div></div>
+    </div>
+    <div class="btns">
+      <button id="computeBtn">Compute</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+<script>
+const peso = n => "₱" + Number(n).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmt0  = n => Number(n).toLocaleString(undefined, {maximumFractionDigits:0});
+const fmt2  = n => Number(n).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+const DAYS = 100, DMI = 0.025; // 2.5% BW/day DM
+
+function getDiet() {
+  return document.querySelector('input[name="diet"]:checked').value;
+}
+function toggleDietUI() {
+  const is8020 = getDiet() === '8020';
+  document.querySelectorAll('.only-8020').forEach(el => el.style.display = is8020 ? '' : 'none');
+  document.getElementById('grid-8020').style.display = is8020 ? '' : 'none';
+  document.getElementById('grid-100').style.display = is8020 ? 'none' : '';
+}
+
+function val(id) {
+  const v = parseFloat(document.getElementById(id).value);
+  return isFinite(v) ? v : NaN;
+}
+
+function compute() {
+  const acq = val('acq'), entry = val('entry'), dm = val('dm'),
+        silPrice = val('silPrice'), finalW = val('final'), sell = val('sell'),
+        caretaker = val('caretaker');
+  const is8020 = getDiet()==='8020';
+  const concPrice = is8020 ? val('concPrice') : 0;
+
+  const req = [['Acquisition', acq],['Entry Weight', entry],['DM %', dm],
+               ['Silage Price', silPrice],['Final Weight', finalW],
+               ['Selling Price', sell],['Caretaker', caretaker]];
+  if (is8020) req.push(['Concentrate Price', concPrice]);
+
+  const missing = req.filter(x => !isFinite(x[1]) ).map(x=>x[0]);
+  if (missing.length) { alert("Please provide valid numbers for:\n- " + missing.join("\n- ")); return; }
+
+  if (dm < 30 || dm > 40) alert("Note: Silage Dry Matter % is expected between 30 and 40.");
+
+  // core math
+  const adg = (finalW - entry) / DAYS;
+  const avgBW = (entry + finalW)/2;
+  const totalDM = DMI * avgBW * DAYS;    // kg DM
+  const asFedTotal = totalDM / (dm/100); // kg as-fed if all silage
+
+  let silageKg, concKg=0, costSilage, costConc=0, totalFeedCost;
+
+  // round kg BEFORE costing (to match original program)
+  if (is8020) {
+    silageKg = Math.round(asFedTotal * 0.80);
+    concKg   = Math.round(asFedTotal * 0.20);
+    costSilage = silageKg * silPrice;
+    costConc   = concKg * concPrice;
+    totalFeedCost = costSilage + costConc;
+
+    // outputs
+    document.getElementById('reqSilage8020').textContent = fmt0(silageKg);
+    document.getElementById('reqConc8020').textContent   = fmt0(concKg);
+    document.getElementById('costSilage8020').textContent= peso(costSilage);
+    document.getElementById('costConc8020').textContent  = peso(costConc);
+    document.getElementById('totalFeed8020').textContent = peso(totalFeedCost);
+    document.getElementById('adg8020').textContent       = fmt2(adg);
+  } else {
+    silageKg = Math.round(asFedTotal);
+    costSilage = silageKg * silPrice;
+    totalFeedCost = costSilage;
+
+    document.getElementById('reqSilage100').textContent  = fmt0(silageKg);
+    document.getElementById('costSilage100').textContent = peso(costSilage);
+    document.getElementById('totalFeed100').textContent  = peso(totalFeedCost);
+    document.getElementById('adg100').textContent        = fmt2(adg);
+  }
+
+  // expenses and profit (original behavior)
+  const totalExp100 = caretaker + totalFeedCost;       // excludes acquisition
+  const gross = finalW * sell;
+  const net   = gross - totalExp100 - acq;
+
+  document.getElementById('exp100').textContent = peso(totalExp100);
+  document.getElementById('gross').textContent  = peso(gross);
+  document.getElementById('net').textContent    = peso(net);
+}
+
+function resetAll() {
+  ['acq','entry','dm','silPrice','concPrice','sell','final','caretaker'].forEach(id=>{
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.querySelector('input[value="8020"]').checked = true;
+  toggleDietUI();
+  // zero outputs
+  ['reqSilage8020','reqConc8020','costSilage8020','costConc8020','totalFeed8020','adg8020',
+   'reqSilage100','costSilage100','totalFeed100','adg100',
+   'exp100','gross','net'].forEach(id=>{
+     const el = document.getElementById(id); if (el) el.textContent = el.id.includes('cost')||el.id==='totalFeed8020'||el.id==='totalFeed100'||id==='exp100'||id==='gross'||id==='net' ? '₱0.00' : '0';
+   });
+}
+
+document.getElementById('computeBtn').addEventListener('click', compute);
+document.getElementById('resetBtn').addEventListener('click', resetAll);
+document.querySelectorAll('input[name="diet"]').forEach(r => r.addEventListener('change', toggleDietUI));
+toggleDietUI();
+</script>
+</body>
+</html>
