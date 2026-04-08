@@ -36,3 +36,5 @@ skills/
 skills-lock.json
 
 data/
+
+.vercel
