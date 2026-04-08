@@ -103,10 +103,6 @@
           <button class="tab-button" data-auth-tab="register" type="button">Register</button>
         </div>
 
-        <div class="social-auth">
-          <button id="googleSignInButton" class="google-button" type="button">Continue with Google</button>
-        </div>
-
         <div class="auth-grid">
           <form id="loginForm" class="auth-form">
             <label>
@@ -118,6 +114,11 @@
               <input type="password" name="password" placeholder="Enter your password" required />
             </label>
             <button class="primary-button" type="submit">Sign In</button>
+            <div class="auth-divider"><span>or continue with</span></div>
+            <button id="googleSignInButton" class="google-button" type="button">
+              <span class="google-mark" aria-hidden="true">G</span>
+              <span>Sign in with Google</span>
+            </button>
           </form>
 
           <form id="registerForm" class="auth-form hidden">

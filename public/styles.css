@@ -249,10 +249,6 @@ a {
   border-radius: 999px;
 }
 
-.social-auth {
-  margin-bottom: 18px;
-}
-
 .tab-button,
 .ghost-button,
 .primary-button,
@@ -334,12 +330,14 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 12px;
   padding: 14px 18px;
   border-radius: 16px;
   font-weight: 800;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(24, 44, 34, 0.1);
+  background: #ffffff;
+  border: 1px solid rgba(24, 44, 34, 0.14);
+  box-shadow: 0 10px 24px rgba(24, 44, 34, 0.07);
 }
 
 .primary-button:hover,
@@ -348,6 +346,47 @@ a {
 .google-button:hover,
 .link-button:hover {
   transform: translateY(-1px);
+}
+
+.auth-divider {
+  position: relative;
+  text-align: center;
+  margin: 2px 0;
+}
+
+.auth-divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(24, 44, 34, 0.12);
+}
+
+.auth-divider span {
+  position: relative;
+  display: inline-block;
+  padding: 0 14px;
+  background: rgba(255, 252, 244, 0.94);
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.google-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4285f4 0%, #4285f4 24%, #ea4335 24%, #ea4335 48%, #fbbc05 48%, #fbbc05 72%, #34a853 72%, #34a853 100%);
+  color: #ffffff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  flex: 0 0 auto;
 }
 
 .auth-sidecard {
