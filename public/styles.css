@@ -374,18 +374,11 @@ a {
   font-weight: 700;
 }
 
-.google-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #4285f4 0%, #4285f4 24%, #ea4335 24%, #ea4335 48%, #fbbc05 48%, #fbbc05 72%, #34a853 72%, #34a853 100%);
-  color: #ffffff;
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1rem;
-  font-weight: 800;
+.google-logo {
+  width: 22px;
+  height: 22px;
+  display: block;
+  object-fit: contain;
   flex: 0 0 auto;
 }
 
