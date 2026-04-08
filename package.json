@@ -1,0 +1,10 @@
+{
+  "name": "cattleflow-pro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack cattle fattening planner with login and saved projections.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
