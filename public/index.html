@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CattleFlow Pro</title>
+  <meta
+    name="description"
+    content="CattleFlow Pro is a cattle finishing planner with live profitability metrics, saved scenarios, and dashboard onboarding."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="site-bg"></div>
+  <div class="app-frame">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">CattleFlow Pro</p>
+        <h1>Finish cattle with a live margin dashboard, not a spreadsheet scramble.</h1>
+        <p class="hero-text">
+          Model 100-day fattening cycles, compare feed strategies, and keep scenarios saved in your browser.
+          This version is tuned for static hosting so it can deploy cleanly on Vercel free.
+        </p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#workspace">Open Workspace</a>
+          <button id="demoFillButton" class="ghost-button" type="button">Load Demo Data</button>
+        </div>
+      </div>
+
+      <aside class="hero-status">
+        <div class="hero-status-card">
+          <span>Deploy Mode</span>
+          <strong>Static and Vercel-ready</strong>
+          <p>No server dependency for core usage. Accounts and projections are stored with browser local storage.</p>
+        </div>
+        <div class="hero-mini-grid">
+          <article>
+            <span>Live KPIs</span>
+            <strong>Auto-updating</strong>
+          </article>
+          <article>
+            <span>Storage</span>
+            <strong>Browser-based</strong>
+          </article>
+          <article>
+            <span>Hosting</span>
+            <strong>Free tier friendly</strong>
+          </article>
+        </div>
+      </aside>
+    </header>
+
+    <main id="workspace" class="workspace">
+      <section class="panel guide-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Operator Guide</p>
+            <h2>A better place for instructions</h2>
+          </div>
+          <p class="subtle">
+            A professional app puts onboarding next to the work, not buried in oversized landing copy.
+          </p>
+        </div>
+
+        <div class="guide-grid">
+          <article class="guide-card">
+            <span class="guide-step">1</span>
+            <strong>Create a workspace account</strong>
+            <p>Register once on this browser, then sign in to keep your own planning records separated.</p>
+          </article>
+          <article class="guide-card">
+            <span class="guide-step">2</span>
+            <strong>Adjust the inputs live</strong>
+            <p>Every numeric field updates the KPI cards, break-even sale price, and feed demand instantly.</p>
+          </article>
+          <article class="guide-card">
+            <span class="guide-step">3</span>
+            <strong>Save scenarios worth comparing</strong>
+            <p>Keep multiple batches, reload them later, and use the dashboard to spot your stronger margin plan.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="authView" class="panel auth-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Workspace Access</p>
+            <h2>Login or register</h2>
+          </div>
+          <p class="subtle">
+            This demo keeps account data in local storage so it works on static hosting like Vercel free.
+          </p>
+        </div>
+
+        <div class="auth-tabs">
+          <button class="tab-button active" data-auth-tab="login" type="button">Login</button>
+          <button class="tab-button" data-auth-tab="register" type="button">Register</button>
+        </div>
+
+        <div class="auth-grid">
+          <form id="loginForm" class="auth-form">
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" placeholder="manager@farm.com" required />
+            </label>
+            <label>
+              <span>Password</span>
+              <input type="password" name="password" placeholder="Enter your password" required />
+            </label>
+            <button class="primary-button" type="submit">Sign In</button>
+          </form>
+
+          <form id="registerForm" class="auth-form hidden">
+            <label>
+              <span>Full name</span>
+              <input type="text" name="name" placeholder="Farm owner name" required />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" placeholder="owner@farm.com" required />
+            </label>
+            <label>
+              <span>Password</span>
+              <input type="password" name="password" placeholder="Use at least 8 characters" required />
+            </label>
+            <button class="primary-button" type="submit">Create Account</button>
+          </form>
+
+          <aside class="auth-sidecard">
+            <p class="eyebrow">What Changes</p>
+            <h3>Cleaner app flow</h3>
+            <ul>
+              <li>Inputs react immediately</li>
+              <li>Instructions sit in a dedicated guide panel</li>
+              <li>Saved runs stay available after refresh on the same browser</li>
+            </ul>
+          </aside>
+        </div>
+
+        <p id="authMessage" class="message-line"></p>
+      </section>
+
+      <section id="dashboardView" class="hidden">
+        <div class="topbar panel">
+          <div>
+            <p class="eyebrow">Farm Dashboard</p>
+            <h2 id="welcomeName">Welcome back</h2>
+          </div>
+          <div class="topbar-actions">
+            <span id="sessionEmail" class="subtle"></span>
+            <button id="logoutButton" class="ghost-button" type="button">Logout</button>
+          </div>
+        </div>
+
+        <section class="panel score-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Live Dashboard</p>
+              <h2>Numbers update while you type</h2>
+            </div>
+            <p id="resultHint" class="subtle">
+              Change any field and the financial snapshot updates immediately before you save.
+            </p>
+          </div>
+
+          <div class="score-grid">
+            <article class="score-card emphasis">
+              <span>Net income</span>
+              <strong id="metricNet">PHP 0.00</strong>
+              <small id="metricRoi">ROI 0.00%</small>
+            </article>
+            <article class="score-card">
+              <span>Gross sale</span>
+              <strong id="metricGross">PHP 0.00</strong>
+              <small>Projected revenue at target finish</small>
+            </article>
+            <article class="score-card">
+              <span>Total feed cost</span>
+              <strong id="metricFeedCost">PHP 0.00</strong>
+              <small id="metricExpenses">Cycle expenses PHP 0.00</small>
+            </article>
+            <article class="score-card">
+              <span>Average daily gain</span>
+              <strong id="metricAdg">0.00 kg/day</strong>
+              <small id="metricBreakeven">Break-even sale PHP 0.00/kg</small>
+            </article>
+          </div>
+        </section>
+
+        <div class="dashboard-grid">
+          <section class="panel calculator-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Projection Builder</p>
+                <h2>100-day finishing planner</h2>
+              </div>
+              <p class="subtle">
+                Use the input board below to tune cost, feed, and target weight assumptions.
+              </p>
+            </div>
+
+            <form id="projectionForm" class="calculator-form">
+              <label class="full-span">
+                <span>Projection name</span>
+                <input type="text" name="title" placeholder="April Batch - 18 Head" required />
+              </label>
+
+              <div class="diet-switch full-span">
+                <label><input type="radio" name="dietMode" value="8020" checked /> 80% Silage + 20% Concentrate</label>
+                <label><input type="radio" name="dietMode" value="100" /> 100% Silage</label>
+              </div>
+
+              <label>
+                <span>Acquisition cost (PHP)</span>
+                <input type="number" name="acquisitionCost" min="0" step="0.01" value="45000" required />
+              </label>
+              <label>
+                <span>Entry weight (kg)</span>
+                <input type="number" name="entryWeight" min="0" step="0.01" value="300" required />
+              </label>
+              <label>
+                <span>Final weight target (kg)</span>
+                <input type="number" name="finalWeight" min="0" step="0.01" value="420" required />
+              </label>
+              <label>
+                <span>Selling price per kilo (PHP)</span>
+                <input type="number" name="sellingPrice" min="0" step="0.01" value="180" required />
+              </label>
+              <label>
+                <span>Silage dry matter %</span>
+                <input type="number" name="dryMatterPercent" min="0" step="0.01" value="35" required />
+              </label>
+              <label>
+                <span>Silage cost per kilo (PHP)</span>
+                <input type="number" name="silagePrice" min="0" step="0.01" value="4" required />
+              </label>
+              <label class="conditional-field" data-mode="8020">
+                <span>Concentrate cost per kilo (PHP)</span>
+                <input type="number" name="concentratePrice" min="0" step="0.01" value="35" />
+              </label>
+              <label>
+                <span>Caretaker salary for cycle (PHP)</span>
+                <input type="number" name="caretakerSalary" min="0" step="0.01" value="3000" required />
+              </label>
+
+              <div class="form-actions full-span">
+                <button class="primary-button" type="submit">Save Projection</button>
+                <button id="resetProjectionButton" class="ghost-button" type="button">Reset Form</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel analytics-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Input Dashboard</p>
+                <h2>Operational analytics</h2>
+              </div>
+              <p class="subtle">These panels are recalculated from your current form values.</p>
+            </div>
+
+            <div class="analytics-stack">
+              <article class="analytics-card">
+                <span>Required silage</span>
+                <strong id="metricSilage">0 kg</strong>
+                <small id="metricSilageCost">Silage cost PHP 0.00</small>
+              </article>
+              <article class="analytics-card">
+                <span>Required concentrate</span>
+                <strong id="metricConcentrate">0 kg</strong>
+                <small id="metricConcentrateCost">Concentrate cost PHP 0.00</small>
+              </article>
+              <article class="analytics-card">
+                <span>Feed mix</span>
+                <div class="progress-bar">
+                  <div id="feedMixBar" class="progress-fill"></div>
+                </div>
+                <small id="feedMixLabel">Silage 80% | Concentrate 20%</small>
+              </article>
+              <article class="advisory-card" id="advisoryCard">
+                <h3>Advisor note</h3>
+                <p>Balanced inputs usually start with dry matter between 30% and 40%, realistic gain targets, and updated feed pricing.</p>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel saved-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Saved Projections</p>
+              <h2>Scenario library</h2>
+            </div>
+            <p class="subtle">
+              Saved scenarios are stored in this browser, making the app Vercel-friendly without server storage.
+            </p>
+          </div>
+          <div id="savedList" class="saved-list">
+            <p class="empty-state">No saved projections yet.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
