@@ -1,5 +1,7 @@
 node_modules/
 .vercel/
+.firebase/
+firebase-debug.log
 
 .adal/
 .agents/

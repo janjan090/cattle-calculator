@@ -1,74 +1,85 @@
 # CattleFlow Pro
 
-CattleFlow Pro is a browser-friendly cattle fattening planner built for quick 100-day finishing projections.
-It includes:
-
-- Live financial dashboard updates while typing
-- Login and registration stored in browser local storage
-- Saved projection scenarios per browser user
-- Static-first deployment setup for Vercel free
+CattleFlow Pro is a Firebase-powered cattle finishing planner built for fast 100-day profitability projections.
 
 ## Features
 
-- Compare `80% silage + 20% concentrate` versus `100% silage`
-- Track net income, ROI, gross sale, break-even sale price, and feed cost
-- Save, reload, and delete planning scenarios
-- Use the app without a database for simple deployment
+- Live KPI dashboard updates while typing
+- Firebase Authentication with email/password login
+- Cloud Firestore saved projections per user
+- Scenario comparison workflow for cattle finishing plans
+- Firebase Hosting deployment support
 
 ## Project Structure
 
 ```text
 .
 |-- index.html
+|-- firebase.json
+|-- .firebaserc
 |-- public/
 |   |-- app.js
+|   |-- firebase-app.js
+|   |-- firebase-config.js
+|   |-- index.html
 |   `-- styles.css
-|-- server.js
-|-- package.json
 `-- vercel.json
 ```
 
-## Run Locally
+## Firebase Setup
 
-1. Open a terminal in the project folder.
-2. Start the local server:
+1. Create a Firebase project
+2. Add a Web App in the Firebase console
+3. Enable `Authentication -> Email/Password`
+4. Create a `Firestore Database`
+5. Replace the placeholder values in [public/firebase-config.js](./public/firebase-config.js)
 
-```bash
-npm start
+## Firestore Rules
+
+Use these rules for the `projections` collection:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /projections/{projectionId} {
+      allow read, delete: if request.auth != null
+        && request.auth.uid == resource.data.userId;
+
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.userId;
+    }
+  }
+}
 ```
 
-3. Open `http://localhost:3000`
+## Deploy To Firebase Hosting
+
+Login:
+
+```bash
+npx firebase-tools login
+```
+
+Deploy:
+
+```bash
+npx firebase-tools deploy --only hosting
+```
 
 ## Deploy To Vercel
 
-This project can be deployed from GitHub to Vercel free.
+This app can still be deployed to Vercel as a static frontend while Firebase handles auth and data.
 
-1. Push the repository to GitHub.
-2. In Vercel, click `Add New Project`.
-3. Import this repository.
-4. Keep the default settings.
-5. Deploy.
+1. Push the repo to GitHub
+2. Import the repo into Vercel
+3. Deploy with default static settings
 
-The included [vercel.json](./vercel.json) is already suitable for this static-first setup.
+## Notes
 
-## Important Note About Storage
-
-This version uses browser `localStorage` for accounts and saved projections.
-
-That means:
-
-- Data is stored per browser/device
-- Users on different devices will not share accounts or saved scenarios
-- This is good for demo use and free static hosting
-- It is not a full production auth/data stack
-
-## Next Upgrade Path
-
-If you want real multi-device login and cloud-synced projections, the next step is connecting the app to a backend such as:
-
-- Supabase
-- Firebase
-- Vercel Postgres + server-side auth
+- Firebase web config is safe to expose in the client
+- Firestore security rules are what protect your data
+- Saved projections sync across devices for signed-in users
 
 ## License
 
