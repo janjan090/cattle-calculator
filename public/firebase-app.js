@@ -2,7 +2,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebas
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  GoogleAuthProvider,
   onAuthStateChanged,
+  signInWithPopup,
   signInWithEmailAndPassword,
   signOut,
   updateProfile
@@ -52,6 +54,7 @@ const resultHint = document.getElementById("resultHint");
 const advisoryCard = document.getElementById("advisoryCard");
 const welcomeName = document.getElementById("welcomeName");
 const sessionEmail = document.getElementById("sessionEmail");
+const googleSignInButton = document.getElementById("googleSignInButton");
 
 const metricNodes = {
   silage: document.getElementById("metricSilage"),
@@ -90,6 +93,7 @@ projectionForm.addEventListener("submit", onSaveProjection);
 document.getElementById("resetProjectionButton").addEventListener("click", resetProjectionForm);
 document.getElementById("logoutButton").addEventListener("click", logout);
 document.getElementById("demoFillButton").addEventListener("click", loadDemoData);
+googleSignInButton.addEventListener("click", onGoogleSignIn);
 
 applyDefaults();
 syncDietFields();
@@ -107,9 +111,11 @@ function initializeFirebaseApp() {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
+  const googleProvider = new GoogleAuthProvider();
   state.appReady = true;
   state.auth = auth;
   state.db = db;
+  state.googleProvider = googleProvider;
 
   onAuthStateChanged(auth, (user) => {
     state.user = user;
@@ -182,6 +188,20 @@ async function onRegister(event) {
   try {
     const credential = await createUserWithEmailAndPassword(state.auth, payload.email.trim(), payload.password);
     await updateProfile(credential.user, { displayName: name });
+    authMessage.textContent = "";
+  } catch (error) {
+    authMessage.textContent = humanizeFirebaseError(error);
+  }
+}
+
+async function onGoogleSignIn() {
+  if (!state.appReady) {
+    authMessage.textContent = "Firebase is not configured yet.";
+    return;
+  }
+
+  try {
+    await signInWithPopup(state.auth, state.googleProvider);
     authMessage.textContent = "";
   } catch (error) {
     authMessage.textContent = humanizeFirebaseError(error);
@@ -564,6 +584,12 @@ function humanizeFirebaseError(error) {
   }
   if (code.includes("weak-password")) {
     return "Use a stronger password with at least 6 characters.";
+  }
+  if (code.includes("popup-closed-by-user")) {
+    return "Google sign-in was cancelled before completion.";
+  }
+  if (code.includes("popup-blocked")) {
+    return "Your browser blocked the Google sign-in popup.";
   }
   if (code.includes("permission-denied")) {
     return "Permission denied. Check your Firebase rules.";

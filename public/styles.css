@@ -249,10 +249,15 @@ a {
   border-radius: 999px;
 }
 
+.social-auth {
+  margin-bottom: 18px;
+}
+
 .tab-button,
 .ghost-button,
 .primary-button,
-.link-button {
+.link-button,
+.google-button {
   border: none;
   cursor: pointer;
   transition: transform 160ms ease, opacity 160ms ease, background 160ms ease;
@@ -324,9 +329,23 @@ a {
   background: rgba(33, 79, 57, 0.08);
 }
 
+.google-button {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 18px;
+  border-radius: 16px;
+  font-weight: 800;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(24, 44, 34, 0.1);
+}
+
 .primary-button:hover,
 .ghost-button:hover,
 .tab-button:hover,
+.google-button:hover,
 .link-button:hover {
   transform: translateY(-1px);
 }
